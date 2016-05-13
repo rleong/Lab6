@@ -52,7 +52,7 @@ public class MainApp extends Application {
 	private TextArea messages = new TextArea();
 	//private NetworkConnection connection = createClient();
 	//
-
+	//
 	private Player appPlayer;
 
 	public int GetPlayerID()
