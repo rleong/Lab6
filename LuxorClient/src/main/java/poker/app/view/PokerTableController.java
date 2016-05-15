@@ -326,6 +326,13 @@ public class PokerTableController {
 		Action act = new Action(eAction.Fold, mainApp.getPlayer());
 		mainApp.messageSend(act);
 	}
+	
+	@FXML
+	public void btnDraw_Click(ActionEvent event) {
+		Button btnFold = (Button) event.getSource();
+		Action act = new Action(eAction.Draw, mainApp.getPlayer());
+		mainApp.messageSend(act);
+	}
 
 	private void scanInputControls(Pane parent, String strControlStartsWith, boolean bVisible) {
 		for (Node component : parent.getChildren()) {
