@@ -134,7 +134,7 @@
                      </children>
                   </HBox>
                   <HBox id="hBoxDeck" fx:id="hBoxDeck" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
-                  <Button id="btnDeal" mnemonicParsing="false" onAction="#btnDeal_Click" prefHeight="26.0" prefWidth="135.0" text="Draw" GridPane.columnIndex="1" />
+                  <Button id="btnDeal" mnemonicParsing="false" onAction="#btnDraw_Click" prefHeight="26.0" prefWidth="135.0" text="Draw" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <Button id="btnGetState" layoutX="191.0" layoutY="287.0" mnemonicParsing="false" onAction="#GetGameState" text="Get State" />

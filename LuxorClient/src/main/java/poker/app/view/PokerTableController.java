@@ -331,6 +331,9 @@ public class PokerTableController {
 	public void btnDraw_Click(ActionEvent event) {
 		Button btnFold = (Button) event.getSource();
 		Action act = new Action(eAction.Draw, mainApp.getPlayer());
+//		int iRuleNbr = Integer.parseInt(mainApp.getRuleName().replace("PokerGame", ""));
+//		eGame Game = eGame.getGame(iRuleNbr);
+//		act.seteGame(Game);
 		mainApp.messageSend(act);
 	}
 

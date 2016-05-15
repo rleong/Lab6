@@ -31,6 +31,12 @@ public class PokerHub extends Hub {
 	private GamePlay HubGamePlay;
 	private int iDealNbr = 0;
 	private eGameState eGameState;
+	private Rule rle = null;
+	private int drawCnt = 0;
+	private String[] drawCntValue = {"ZERO", "FIRST","SECOND","THIRD",
+	                                 "FOURTH","FIFTH","SIXTH",
+	                                 "SEVENTH", "EIGHTH", "NINTH",
+	                                 "TENTH"};
 
 	public PokerHub(int port) throws IOException {
 		super(port);
@@ -83,7 +89,7 @@ public class PokerHub extends Hub {
 				// Get the Rule based on the game selected
 				// 1 line of code
 
-				Rule rle = new Rule(act.geteGame());
+				rle = new Rule(act.geteGame());
 
 				// The table should eventually allow multiple instances of
 				// 'GamePlay'...
@@ -148,6 +154,7 @@ public class PokerHub extends Hub {
 
 				// set the draw to the first draw
 				HubGamePlay.setDrawCnt(eDrawCount.FIRST);
+				drawCnt ++;
 
 				//	try to deal the cards... this can potentially throw an exception.. if so, send the exception back to the client
 				try {
@@ -161,8 +168,32 @@ public class PokerHub extends Hub {
 				System.out.println("Sending Start back to Client");
 				sendToAll(HubGamePlay);
 				break;
+			
+			case Draw:
+				resetOutput();
+				
+				//Set the draw count
+				int rleMax = rle.getPlayerCardsMax() - 1;
+				
+				if(drawCnt != rleMax && drawCnt != 0){
+					drawCnt++;
+					HubGamePlay.setDrawCnt(eDrawCount.valueOf(drawCntValue[drawCnt]));
+					//DealCards(eDrawCount.valueOf(drawCntValue[drawCnt]));
+				}
+				//try to deal the cards... this can potentially throw an exception.. if so, send the exception back to the client
+				try {
+					DealCards(HubGamePlay.getRule().getCardDraw(HubGamePlay.getDrawCnt()));
+				} catch (DeckException e) {
+					e.printStackTrace();
+					sendToAll(e);
+				}
+				
+				// Send the state of the game back to the players
+				System.out.println("Drawing cards with drawcount" + drawCnt);
+				sendToAll(HubPokerTable);
+				break;
+				
 			case Deal:
-
 				break;
 			}
 		}
