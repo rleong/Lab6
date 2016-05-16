@@ -199,16 +199,20 @@ public class PokerHub extends Hub {
 				else if (drawCnt == rleMax) {
 					// final Hand WinningHand =
 					// GamePlayPlayerHand.getBestHand();
+					//tempHands = HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(1).getPlayerID());
 
 					//tempHands = HubGamePlay.getGamePlayers().values();
+					
 					//Player[] players = (Player[]) HubGamePlay.getGamePlayers().values().toArray();
-								
+					
+					
 					
 							
 					for (int i = 0; i < HubGamePlay.getGamePlayers().size(); i++) {
 						// tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
 						try {
-							maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+							//maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+							maxscore = 0;
 							if (maxscore < Hand
 									.Evaluate(
 											HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
