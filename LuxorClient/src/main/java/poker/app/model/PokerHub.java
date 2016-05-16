@@ -37,10 +37,8 @@ public class PokerHub extends Hub {
 	private eGameState eGameState;
 	private Rule rle = null;
 	private int drawCnt = 0;
-	private String[] drawCntValue = {"ZERO", "FIRST","SECOND","THIRD",
-	                                 "FOURTH","FIFTH","SIXTH",
-	                                 "SEVENTH", "EIGHTH", "NINTH",
-	                                 "TENTH"};
+	private String[] drawCntValue = { "ZERO", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH", "SIXTH", "SEVENTH",
+			"EIGHTH", "NINTH", "TENTH" };
 
 	public PokerHub(int port) throws IOException {
 		super(port);
@@ -157,11 +155,11 @@ public class PokerHub extends Hub {
 				}
 
 				// set the draw to the first draw
-				drawCnt ++;
+				drawCnt++;
 				HubGamePlay.setDrawCnt(eDrawCount.FIRST);
-				
 
-				//	try to deal the cards... this can potentially throw an exception.. if so, send the exception back to the client
+				// try to deal the cards... this can potentially throw an
+				// exception.. if so, send the exception back to the client
 				try {
 					DealCards(HubGamePlay.getRule().getCardDraw(HubGamePlay.getDrawCnt()));
 				} catch (DeckException e) {
@@ -173,61 +171,73 @@ public class PokerHub extends Hub {
 				System.out.println("Sending Start back to Client");
 				sendToAll(HubGamePlay);
 				break;
-			
+
 			case Draw:
 				resetOutput();
-				
-				//Set the draw count limit
+
+				// Set the draw count limit
 				int rleMax = rle.getPlayerCardsMax() - 1;
 				int maxscore = 0;
 				UUID highplayer = null;
 				ArrayList<Hand> tempHands = new ArrayList<Hand>();
-				//Do the draw count thingy
-				if(drawCnt != rleMax && drawCnt != 0){
+				// Do the draw count thing
+				if (drawCnt != rleMax && drawCnt != 0) {
 					drawCnt++;
 					HubGamePlay.setDrawCnt(eDrawCount.valueOf(drawCntValue[drawCnt]));
-					//try to deal the cards... this can potentially throw an exception.. if so, send the exception back to the client
+					// try to deal the cards... this can potentially throw an
+					// exception.. if so, send the exception back to the client
 					try {
-						//System.out.println("yup");
+						// System.out.println("yup");
 						DealCards(HubGamePlay.getRule().getCardDraw(HubGamePlay.getDrawCnt()));
 					} catch (DeckException e) {
-						//System.out.println("nope");
+						// System.out.println("nope");
 						e.printStackTrace();
 						sendToAll(e);
 					}
-				}
-				else if(drawCnt == rleMax){
-					//final Hand WinningHand = GamePlayPlayerHand.getBestHand();
-					
-					//tempHands = HubGamePlay.getGamePlayers().get(Players);
-					
-					for(int i = 1; i <= HubGamePlay.getGamePlayers().size(); i++){
-						//tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
-						try {
-							maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
-							if(maxscore < Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength()){
-								//maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
-								maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength();
-								highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
+					// if it's the last draw, evaluate and show winner!!!!
+					if (drawCnt == rleMax) {
+						// final Hand WinningHand =
+						// GamePlayPlayerHand.getBestHand();
+
+						// tempHands =
+						// HubGamePlay.getGamePlayers().get(Players);
+
+						for (int i = 0; i < HubGamePlay.getGamePlayers().size(); i++) {
+							// tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
+							try {
+								maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+								if (maxscore < Hand
+										.Evaluate(HubGamePlay
+												.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
+										.getHandScore().getHandStrength()) {
+									// maxscore =
+									// Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
+									maxscore = Hand
+											.Evaluate(HubGamePlay
+													.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
+											.getHandScore().getHandStrength();
+									highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
+								}
+							} catch (HandException e) {
+								// huh
+								System.out.print("Something went wrong");
+								e.printStackTrace();
 							}
-						} catch (HandException e) {
-							//huh
-							System.out.print("Something went wrong");
-							e.printStackTrace();
 						}
+
+						System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
+						PokerTableController winner = new PokerTableController();
+						winner.displayWinner(HubGamePlay.getGamePlayer(highplayer));
 					}
-					
-					System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
-					PokerTableController winner = new PokerTableController();
-					winner.displayWinner(HubGamePlay.getGamePlayer(highplayer));
 				}
-				
+
 				// Send the state of the game back to the players
 				System.out.println("Drawing cards with draw count " + drawCnt);
 				sendToAll(HubGamePlay);
 				break;
-				
+
 			case Deal:
+				sendToAll(HubGamePlay);
 				break;
 			}
 		}
@@ -250,9 +260,7 @@ public class PokerHub extends Hub {
 					}
 				}
 
-			}
-			else if (cd.getCardDestination() == eCardDestination.Community)
-			{
+			} else if (cd.getCardDestination() == eCardDestination.Community) {
 				HubGamePlay.getCommonHand().Draw(HubGamePlay.getGameDeck());
 			}
 		}
