@@ -196,32 +196,33 @@ public class PokerHub extends Hub {
 					}
 				}
 				else if(drawCnt == rleMax){
-//					final Hand WinningHand = GamePlayPlayerHand.getBestHand();
+					//final Hand WinningHand = GamePlayPlayerHand.getBestHand();
 					
-					tempHands = HubGamePlay.getGamePlayers().get(Players);
+					//tempHands = HubGamePlay.getGamePlayers().get(Players);
 					
 					for(int i = 1; i <= HubGamePlay.getGamePlayers().size(); i++){
-						tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
+						//tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
+						try {
+							maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+							if(maxscore < Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength()){
+								//maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
+								maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength();
+								highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
+							}
+						} catch (HandException e) {
+							//huh
+							System.out.print("Something went wrong");
+							e.printStackTrace();
+						}
 					}
-					try {
-						maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
-//						if(maxscore < Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength()){
-//							//maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
-//							maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength();
-//							highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
-//						}
-					} catch (HandException e) {
-						//huh
-						System.out.print("Something went wrong");
-						e.printStackTrace();
-					}
-					System.out.println("Winner is... " + maxscore);
+					
+					System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
 					
 				}
 				
 				// Send the state of the game back to the players
 				System.out.println("Drawing cards with draw count " + drawCnt);
-				sendToAll(HubPokerTable);
+				sendToAll(HubGamePlay);
 				break;
 				
 			case Deal:
