@@ -12,6 +12,7 @@ import java.util.UUID;
 import exceptions.DeckException;
 import exceptions.HandException;
 import netgame.common.Hub;
+import poker.app.view.PokerTableController;
 import pokerBase.Action;
 import pokerBase.Card;
 import pokerBase.CardDraw;
@@ -217,7 +218,8 @@ public class PokerHub extends Hub {
 					}
 					
 					System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
-					
+					PokerTableController winner = new PokerTableController();
+					winner.displayWinner(HubGamePlay.getGamePlayer(highplayer));
 				}
 				
 				// Send the state of the game back to the players
