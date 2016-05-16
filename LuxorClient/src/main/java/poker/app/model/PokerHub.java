@@ -180,6 +180,7 @@ public class PokerHub extends Hub {
 				int rleMax = rle.getPlayerCardsMax() - 1;
 				int maxscore = 0;
 				UUID highplayer = null;
+				ArrayList<Hand> tempHands = new ArrayList<Hand>();
 				//Do the draw count thingy
 				if(drawCnt != rleMax && drawCnt != 0){
 					drawCnt++;
@@ -195,21 +196,26 @@ public class PokerHub extends Hub {
 					}
 				}
 				else if(drawCnt == rleMax){
+//					final Hand WinningHand = GamePlayPlayerHand.getBestHand();
+					
+					tempHands = HubGamePlay.getGamePlayers().get(Players);
 					
 					for(int i = 1; i <= HubGamePlay.getGamePlayers().size(); i++){
-						try {
-							if(maxscore < Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength()){
-								maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
-								highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
-							}
-						} catch (HandException e) {
-							//huh
-							System.out.print("Something went wrong");
-							e.printStackTrace();
-						}
+						tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
 					}
-					
-					System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
+					try {
+						maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+//						if(maxscore < Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength()){
+//							//maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
+//							maxscore = Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID())).getHandScore().getHandStrength();
+//							highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
+//						}
+					} catch (HandException e) {
+						//huh
+						System.out.print("Something went wrong");
+						e.printStackTrace();
+					}
+					System.out.println("Winner is... " + maxscore);
 					
 				}
 				
