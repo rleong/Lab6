@@ -54,6 +54,7 @@ import pokerBase.GamePlay;
 import pokerBase.GamePlayPlayerHand;
 import pokerBase.Hand;
 import pokerBase.Player;
+import pokerBase.Rule;
 import pokerBase.Table;
 import pokerEnums.eAction;
 import pokerEnums.eDrawCount;
@@ -64,6 +65,8 @@ public class PokerTableController {
 
 	// Reference to the main application.
 	private MainApp mainApp;
+	private Rule rle = null;
+	private int Count = 1;
 
 	public PokerTableController() {
 	}
@@ -310,15 +313,32 @@ public class PokerTableController {
 		mainApp.messageSend(act);
 	}
 
+	// ********
 	@FXML
 	public void btnDraw_Click(ActionEvent event) {
 		Button btnFold = (Button) event.getSource();
 		Action act = new Action(eAction.Draw, mainApp.getPlayer());
-		//int iRuleNbr = Integer.parseInt(mainApp.getRuleName().replace("PokerGame", ""));
-		//eGame Game = eGame.getGame(iRuleNbr);
-		//act.seteGame(Game);		
-		// Integer.parseInt(mainApp.getRuleName().replace("PokerGame", ""));	
+		// int iRuleNbr =
+		// Integer.parseInt(mainApp.getRuleName().replace("PokerGame", ""));
+		// eGame Game = eGame.getGame(iRuleNbr);
+		// act.seteGame(Game);
+		// Integer.parseInt(mainApp.getRuleName().replace("PokerGame", ""));
+
+		// int rleMax = rle.getPlayerCardsMax();
+		// if (Count < rleMax){
+		// hboxP1Cards.getChildren().clear();
+		// hboxP2Cards.getChildren().clear();
+		// hboxP3Cards.getChildren().clear();
+		// hboxP4Cards.getChildren().clear();}
+		// Count++;
+
+		hboxP1Cards.getChildren().clear();
+		hboxP2Cards.getChildren().clear();
+		hboxP3Cards.getChildren().clear();
+		hboxP4Cards.getChildren().clear();
+
 		mainApp.messageSend(act);
+
 	}
 
 	@FXML

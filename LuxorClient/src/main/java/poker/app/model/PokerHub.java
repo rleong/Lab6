@@ -194,41 +194,43 @@ public class PokerHub extends Hub {
 						e.printStackTrace();
 						sendToAll(e);
 					}
-					// if it's the last draw, evaluate and show winner!!!!
-					if (drawCnt == rleMax) {
-						// final Hand WinningHand =
-						// GamePlayPlayerHand.getBestHand();
+				}
+				// if it's the last draw, evaluate and show winner!!!!
+				else if (drawCnt == rleMax) {
+					// final Hand WinningHand =
+					// GamePlayPlayerHand.getBestHand();
 
-						// tempHands =
-						// HubGamePlay.getGamePlayers().get(Players);
-
-						for (int i = 0; i < HubGamePlay.getGamePlayers().size(); i++) {
-							// tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
-							try {
-								maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
-								if (maxscore < Hand
+					//tempHands = HubGamePlay.getGamePlayers().values();
+					//Player[] players = (Player[]) HubGamePlay.getGamePlayers().values().toArray();
+								
+					
+							
+					for (int i = 0; i < HubGamePlay.getGamePlayers().size(); i++) {
+						// tempHands.add(HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()));
+						try {
+							maxscore = Hand.Evaluate(tempHands).getHandScore().getHandStrength();
+							if (maxscore < Hand
+									.Evaluate(
+											HubGamePlay.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
+									.getHandScore().getHandStrength()) {
+								// maxscore =
+								// Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePvalayers().get(i).getPlayerID())).getHandScore().getHandStrength();
+								maxscore = Hand
 										.Evaluate(HubGamePlay
 												.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
-										.getHandScore().getHandStrength()) {
-									// maxscore =
-									// Hand.Evaluate(HubGamePlay.getPlayerHand(HubGamePlay.getGamePlayers().get(i).getPlayerID())).getHandScore().getHandStrength();
-									maxscore = Hand
-											.Evaluate(HubGamePlay
-													.getPlayerHand(HubGamePlay.getPlayerByPosition(i).getPlayerID()))
-											.getHandScore().getHandStrength();
-									highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
-								}
-							} catch (HandException e) {
-								// huh
-								System.out.print("Something went wrong");
-								e.printStackTrace();
+										.getHandScore().getHandStrength();
+								highplayer = HubGamePlay.getGamePlayers().get(i).getPlayerID();
 							}
+						} catch (HandException e) {
+							// huh
+							System.out.print("Something went wrong");
+							e.printStackTrace();
 						}
-
-						System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
-						PokerTableController winner = new PokerTableController();
-						winner.displayWinner(HubGamePlay.getGamePlayer(highplayer));
 					}
+
+					System.out.println("Winner is... " + HubGamePlay.getGamePlayer(highplayer).getPlayerName());
+					PokerTableController winner = new PokerTableController();
+					winner.displayWinner(HubGamePlay.getGamePlayer(highplayer));
 				}
 
 				// Send the state of the game back to the players
