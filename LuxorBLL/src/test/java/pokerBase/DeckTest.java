@@ -105,7 +105,7 @@ public class DeckTest {
 			Method mDraw = c.getDeclaredMethod("Draw", null);
 			//	Load 'mGetDeckSize' with the 'GetDeckSize' method
 			Method mGetDeckSize = c.getDeclaredMethod("GetDeckSize", null);
-			//	Change the visibilty of 'GetDeckSize' to true *Good Grief!*
+			//	Change the visibility of 'GetDeckSize' to true *Good Grief!*
 			mGetDeckSize.setAccessible(true);
 
 			//	invoke 'Draw'
